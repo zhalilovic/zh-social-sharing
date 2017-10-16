@@ -1,0 +1,21 @@
+ul.zh-social-sharing-buttons {
+	list-style: none inside none;
+	padding: 0;
+	margin: 0;
+}
+ul.zh-social-sharing-buttons li {
+	float: left;
+	width: 35px;
+	margin-right: 5px;
+}
+
+.zh-social-sharing-thumbnail-wrap {
+	position: relative;
+}
+.zh-social-sharing-thumbnail-wrap ul.zh-social-sharing-buttons {
+	position: absolute;
+	top: 20px;
+	left: 20px;
+}
+ 
+ 

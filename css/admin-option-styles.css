@@ -1,0 +1,25 @@
+.group:after {
+	content: "";
+	display: table;
+	clear: both;
+}
+
+.zh-social-sharing .form-table th {
+	padding-right: 3.75rem; /* 60px / 16px */
+	padding-right: 60px;
+}
+
+ul.zh-sortable {
+	margin-bottom: 0;
+}
+ul.zh-sortable li {
+	float: left;
+	width: 60px;
+	margin-right: 5px;
+}
+
+.zh-social-sharing .wp-picker-container {
+	margin-bottom: 6px;
+}
+ 
+ 
