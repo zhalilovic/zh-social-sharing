@@ -23,7 +23,7 @@ if ( ! class_exists( 'ZH_Button_Renderer' ) ) :
 			global $post;
 			
 			if( $this->is_allowed_post_type( $post->ID ) && is_singular() && is_main_query() && in_the_loop() ) {
-				$new_content = self::output_icons( get_option( ZH_Settings::SETTING_ID_BUTTON_ORDER ), get_option( ZH_Settings::SETTING_ID_CUSTOM_COLOR ), get_option( ZH_Settings::SETTING_ID_HEX_COLOR ) );
+				$new_content = self::output_buttons( get_option( ZH_Settings::SETTING_ID_BUTTON_ORDER ), get_option( ZH_Settings::SETTING_ID_HEX_COLOR ), get_option( ZH_Settings::SETTING_ID_BUTTON_SIZES ), get_option( ZH_Settings::SETTING_ID_CUSTOM_COLOR ) );
 				$content .= $new_content;	
 			}	
 			return $content;
@@ -49,7 +49,7 @@ if ( ! class_exists( 'ZH_Button_Renderer' ) ) :
 		
 		public function display_buttons_inside_the_post_thumbnail( $html, $post_id ) {
 			if ( ! empty( $html ) && $this->is_allowed_post_type( $post_id ) && is_singular() && is_main_query() && in_the_loop() ) {
-				$html = '<div class="zh-social-sharing-thumbnail-wrap">' . $html . self::output_icons( get_option( ZH_Settings::SETTING_ID_BUTTON_ORDER ), get_option( ZH_Settings::SETTING_ID_CUSTOM_COLOR ), get_option( ZH_Settings::SETTING_ID_HEX_COLOR ) ) . '</div>';	
+				$html = '<div class="zh-social-sharing-thumbnail-wrap">' . $html . self::output_buttons( get_option( ZH_Settings::SETTING_ID_BUTTON_ORDER ), get_option( ZH_Settings::SETTING_ID_HEX_COLOR ), get_option( ZH_Settings::SETTING_ID_BUTTON_SIZES ), get_option( ZH_Settings::SETTING_ID_CUSTOM_COLOR ) ) . '</div>';	
 			}
 		
 			return $html;
@@ -59,7 +59,7 @@ if ( ! class_exists( 'ZH_Button_Renderer' ) ) :
 			global $post;
 			
 			if( $this->is_allowed_post_type( $post->ID ) && is_singular() ) {
-				self::output_icons( get_option( ZH_Settings::SETTING_ID_BUTTON_ORDER ), get_option( ZH_Settings::SETTING_ID_CUSTOM_COLOR ), get_option( ZH_Settings::SETTING_ID_HEX_COLOR ) );
+				self::output_buttons( get_option( ZH_Settings::SETTING_ID_BUTTON_ORDER ), get_option( ZH_Settings::SETTING_ID_HEX_COLOR ), get_option( ZH_Settings::SETTING_ID_BUTTON_SIZES ), get_option( ZH_Settings::SETTING_ID_CUSTOM_COLOR ) );
 			}
 		}
 		
@@ -86,39 +86,34 @@ if ( ! class_exists( 'ZH_Button_Renderer' ) ) :
 		}
 		
 		public function social_sharing_shortcode( $atts ) {
-			$prefix = 'zh_';
 			
 			extract( shortcode_atts( array(
-				'social_networks' => get_option( ZH_Settings::get_default_social_networks() ),
-				'order' 		  => get_option( ZH_Settings::SETTING_ID_SOCIAL_NETWORKS ),
-				'color' 	  	  => get_option( ZH_Settings::SETTING_ID_HEX_COLOR ),
-				'size'	 		  => get_option( ZH_Settings::SETTING_ID_BUTTON_SIZES ),
-				'post_types' 	  => get_option( ZH_Settings::SETTING_ID_POST_TYPES ),
-				'positions' 	  => get_option( ZH_Settings::SETTING_ID_BUTTON_POSITIONS ),
+				'social_networks' => ZH_Settings::get_default_social_networks(),
+				'color' 	  	  => '',
+				'size'	 		  => ZH_Settings::get_default_button_size(),
 			), $atts, 'zh_social_sharing' ));
 			
-			
-			if( $tooltip == 'on' ) $tooltip = 1;
-			if( $tooltip == 'off' ) $tooltip = 0;
-			
-			// $defaults = new ZH_Default_Settings(); $defaults->get_default_social_networks();
-			
-			ob_start();
+			if ( is_string( $social_networks ) ) {
+				$social_networks = preg_replace('/\s+/', '', $social_networks); // Strip all whitespace
+				$social_networks = explode( ',', $social_networks );
+			}			
 						
-		?><p><?php echo var_dump( $color ); var_dump( ZH_Settings::get_default_social_networks()); ?></p><?php
+			ob_start();
+									
+			$this->output_buttons( $social_networks, $color, $size );
 			
 			$content = ob_get_clean();
 
 			return $content;
 		}
 		
-		public static function output_icons( $social_networks, $colors_allowed, $hex_color, $button_order_option_id = NULL ) {
+		public static function output_buttons( $social_networks, $hex_color, $button_size, $colors_allowed = true, $button_order_option_id = NULL ) {
 		?>
 			<ul class="group <?php if ( is_admin() ) { ?>zh-sortable<?php } else { ?>zh-social-sharing-buttons<?php } ?>">
 				
 				<?php foreach ( $social_networks as $social_network ) : ?>
 								
-					<li id="<?php echo esc_attr( $social_network ); ?>" class="<?php if ( wp_is_mobile() && ( $social_network === 'zh-whatsapp' || $social_network === 'whatsapp' ) ) { ?>whatsapp-hide-mobile<?php } ?>">
+					<li id="<?php echo esc_attr( $social_network ); ?>" class="<?php if ( wp_is_mobile() && ( $social_network === 'zh-whatsapp' || $social_network === 'whatsapp' ) ) { ?>whatsapp-hide-mobile<?php } ?> zh-<?php echo esc_attr( $button_size ); ?>-button-size">
 					
 						<?php if ( is_admin() ) : ?>
 							<input  
@@ -135,10 +130,11 @@ if ( ! class_exists( 'ZH_Button_Renderer' ) ) :
 								<?php 
 								switch ( $social_network ) : 
 									
+									case 'facebook';
 									case 'zh-facebook':
 					
 								?>
-										<rect id="zh-facebook-back" fill="#3A5A99" width="128" height="128" <?php if ( $colors_allowed ) { ?>style="fill: <?php echo esc_attr( $hex_color ); ?>"<?php } ?> />
+										<rect id="zh-facebook-back" fill="#3A5A99" width="128" height="128" <?php if ( $colors_allowed && $hex_color ) { ?>style="fill: <?php echo esc_attr( $hex_color ); ?>"<?php } ?> />
 										<path id="zh-facebook-facebook" fill="#FFFFFF" d="M95.8838,28.1602H32.1162c-2.1855,0-3.956,1.7705-3.956,3.956v63.7676
 											c0,2.1846,1.7705,3.956,3.956,3.956h34.3301V72.082h-9.3408V61.2637h9.3408v-7.9776c0-9.2588,5.6543-14.2998,13.9141-14.2998
 											c3.956,0,7.3554,0.2945,8.3466,0.4263v9.6753l-5.7275,0.0024c-4.4922,0-5.3613,2.1348-5.3613,5.2666v6.9068h10.7119L86.9355,72.082
@@ -146,11 +142,12 @@ if ( ! class_exists( 'ZH_Button_Renderer' ) ) :
 											
 									<?php 
 										break;
-										
+									
+									case 'twitter':	
 									case 'zh-twitter':
 									?>
 								
-										<rect id="zh-twitter-back" fill="#55ACEE" width="128" height="128" <?php if ( $colors_allowed ) { ?>style="fill: <?php echo esc_attr( $hex_color ); ?>"<?php } ?> />
+										<rect id="zh-twitter-back" fill="#55ACEE" width="128" height="128" <?php if ( $colors_allowed && $hex_color ) { ?>style="fill: <?php echo esc_attr( $hex_color ); ?>"<?php } ?> />
 										<path id="zh-twitter-twitter" fill="#FFFFFF" d="M99.8398,41.7695c-2.6367,1.17-5.4707,1.96-8.4462,2.3155
 											c3.0361-1.8204,5.3681-4.7022,6.4658-8.1358c-2.8408,1.6846-5.9883,2.9092-9.3379,3.5684
 											c-2.6826-2.8584-6.5049-4.6436-10.7344-4.6436c-8.1221,0-14.7065,6.584-14.7065,14.7051c0,1.1533,0.1303,2.2754,0.3808,3.3516
@@ -163,10 +160,11 @@ if ( ! class_exists( 'ZH_Button_Renderer' ) ) :
 											
 									<?php 
 										break;
-										
+									
+									case 'google_plus':
 									case 'zh-google_plus':
 									?>
-										<rect id="zh-google-back" fill="#DC4B3E" width="128" height="128" <?php if ( $colors_allowed ) { ?>style="fill: <?php echo esc_attr( $hex_color ); ?>"<?php } ?> />
+										<rect id="zh-google-back" fill="#DC4B3E" width="128" height="128" <?php if ( $colors_allowed && $hex_color ) { ?>style="fill: <?php echo esc_attr( $hex_color ); ?>"<?php } ?> />
 										<g id="zh-google-google">
 											<g>
 												<path fill="#FFFFFF" d="M28.1738,64.0293c-0.4472-11.7427,9.8399-22.5938,21.5938-22.7354
@@ -186,11 +184,12 @@ if ( ! class_exists( 'ZH_Button_Renderer' ) ) :
 										
 									<?php 
 										break;
-										
+									
+									case 'pinterest':
 									case 'zh-pinterest':
 									?>
 								
-										<rect id="zh-pinterest-back" fill="#BD081C" width="128" height="128" <?php if ( $colors_allowed ) { ?>style="fill: <?php echo esc_attr( $hex_color ); ?>"<?php } ?> />
+										<rect id="zh-pinterest-back" fill="#BD081C" width="128" height="128" <?php if ( $colors_allowed && $hex_color ) { ?>style="fill: <?php echo esc_attr( $hex_color ); ?>"<?php } ?> />
 										<path id="zh-pinterest-pinterest" fill="#FFFFFF" d="M91.7451,51.7451c0,16.1553-8.9746,28.2197-22.2148,28.2197
 											c-4.4444,0-8.625-2.4043-10.0601-5.1347c0,0-2.3901,9.4902-2.895,11.3203c-1.7798,6.4648-7.0249,12.9394-7.4302,13.4746
 											c-0.2846,0.3652-0.915,0.25-0.98-0.2344c-0.1147-0.8252-1.4497-8.9902,0.125-15.6504c0.7901-3.3398,5.295-22.435,5.295-22.435
@@ -203,11 +202,12 @@ if ( ! class_exists( 'ZH_Button_Renderer' ) ) :
 											
 									<?php 
 										break;
-										
+									
+									case 'linkedin':	
 									case 'zh-linkedin':
 									?>
 								
-										<rect id="zh-linkedin-back" fill="#0076B2" width="128" height="128" <?php if ( $colors_allowed ) { ?>style="fill: <?php echo esc_attr( $hex_color ); ?>"<?php } ?> />
+										<rect id="zh-linkedin-back" fill="#0076B2" width="128" height="128" <?php if ( $colors_allowed && $hex_color ) { ?>style="fill: <?php echo esc_attr( $hex_color ); ?>"<?php } ?> />
 										<g id="zh-linkedin-linkedin">
 											<path fill="#FFFFFF" d="M29.0752,51.7471h14.8686v47.792H29.0752V51.7471z M36.5137,27.9897c4.7514,0,8.6089,3.8589,8.6089,8.6133
 												c0,4.7554-3.8575,8.6143-8.6089,8.6143c-4.7705,0-8.6172-3.8589-8.6172-8.6143C27.8965,31.8486,31.7432,27.9897,36.5137,27.9897"
@@ -219,13 +219,14 @@ if ( ! class_exists( 'ZH_Button_Renderer' ) ) :
 										
 									<?php 
 										break;
-										
+									
+									case 'whatsapp':
 									case 'zh-whatsapp':
 									
 										// if ( wp_is_mobile() ) :
 									?>
 										
-											<rect id="zh-whatsapp-back" fill="#25D366" width="128" height="128" <?php if ( $colors_allowed ) { ?>style="fill: <?php echo esc_attr( $hex_color ); ?>"<?php } ?> />
+											<rect id="zh-whatsapp-back" fill="#25D366" width="128" height="128" <?php if ( $colors_allowed && $hex_color ) { ?>style="fill: <?php echo esc_attr( $hex_color ); ?>"<?php } ?> />
 											<g id="zh-whatsapp-whatsapp">
 												<path fill="#FFFFFF" d="M28.1602,100.0127l5.0634-18.4951c-3.124-5.4121-4.7666-11.5518-4.7646-17.8418
 													c0.0078-19.6787,16.0185-35.6885,35.6904-35.6885c9.5479,0.0039,18.5088,3.7207,25.2471,10.4678
