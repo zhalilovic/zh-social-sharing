@@ -89,7 +89,7 @@ if ( ! class_exists( 'ZH_Button_Renderer' ) ) :
 			$prefix = 'zh_';
 			
 			extract( shortcode_atts( array(
-				'social_networks' => get_option( ZH_Settings::SETTING_ID_SOCIAL_NETWORKS ),
+				'social_networks' => get_option( ZH_Settings::get_default_social_networks() ),
 				'order' 		  => get_option( ZH_Settings::SETTING_ID_SOCIAL_NETWORKS ),
 				'color' 	  	  => get_option( ZH_Settings::SETTING_ID_HEX_COLOR ),
 				'size'	 		  => get_option( ZH_Settings::SETTING_ID_BUTTON_SIZES ),
@@ -118,7 +118,7 @@ if ( ! class_exists( 'ZH_Button_Renderer' ) ) :
 				
 				<?php foreach ( $social_networks as $social_network ) : ?>
 								
-					<li id="<?php echo esc_attr( $social_network ); ?>">
+					<li id="<?php echo esc_attr( $social_network ); ?>" class="<?php if ( wp_is_mobile() && ( $social_network === 'zh-whatsapp' || $social_network === 'whatsapp' ) ) { ?>whatsapp-hide-mobile<?php } ?>">
 					
 						<?php if ( is_admin() ) : ?>
 							<input  

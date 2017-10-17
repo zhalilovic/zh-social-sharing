@@ -17,5 +17,9 @@ ul.zh-social-sharing-buttons li {
 	top: 20px;
 	left: 20px;
 }
+
+.whatsapp-hide-mobile {
+	display: none; /* Hide the whatsapp icon on mobile devices */
+}
  
  
