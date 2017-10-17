@@ -27,18 +27,66 @@ if ( ! class_exists( 'ZH_Settings' ) ) :
 		/** Option defaults. */
 		private static $default_social_networks  = array( 'facebook', 'twitter', 'google_plus', 'pinterest', 'linkedin', 'whatsapp' );
 		private static $default_button_order 	 = array( 'zh-facebook', 'zh-twitter', 'zh-google_plus', 'zh-pinterest', 'zh-linkedin', 'zh-whatsapp' );
-		private static $default_is_custom_color	 = false;
+		private static $default_has_custom_color = false;
 		private static $default_hex_color 		 = '#00c964'; // green
-		private static $default_button_size 	 = array( 'medium' );
+		private static $default_button_size 	 = 'medium';
 		private static $default_post_types 	     = array( 'post' );
 		private static $default_button_positions = array( 'after_post_title', 'after_post_content' );
+		
+		public static function set_default_social_networks( $value ) {
+			self::$default_social_networks = $value;
+		}
 		
 		public static function get_default_social_networks() {
 			return self::$default_social_networks;
 		}
 		
-		public static function set_default_social_networks( $value ) {
-			self::$default_social_networks = $value;
+		public static function set_default_button_order( $value ) {
+			self::$default_button_order = $value;
+		}
+		
+		public static function get_default_button_order() {
+			return self::$default_button_order;
+		}
+		
+		public static function set_default_has_custom_color( $value ) {
+			self::$default_has_custom_color = $value;
+		}
+		
+		public static function default_has_custom_color() {
+			return self::$default_has_custom_color;
+		}
+		
+		public static function set_default_hex_color( $value ) {
+			self::$default_hex_color = $value;
+		}
+		
+		public static function get_default_hex_color() {
+			return self::$default_hex_color;
+		}
+		
+		public static function set_default_button_size( $value ) {
+			self::$default_button_size = $value;
+		}
+		
+		public static function get_default_button_size() {
+			return self::$default_button_size;
+		}
+		
+		public static function set_default_post_types( $value ) {
+			self::$default_post_types = $value;
+		}
+		
+		public static function get_default_post_types() {
+			return self::$default_post_types;
+		}
+		
+		public static function set_default_button_positions( $value ) {
+			self::$default_button_positions = $value;
+		}
+		
+		public static function get_default_button_positions() {
+			return self::$default_button_positions;
 		}
 		
 		/** Refers to a single instance of this class. */
@@ -116,6 +164,16 @@ if ( ! class_exists( 'ZH_Settings' ) ) :
 			return $selected_options;
 		}
 		
+		public function sanitize_button_sizes( $selected_options ) {
+			$default_options = $this->get_settings_data();
+			
+			if ( array_diff( $selected_options, array_keys( $default_options['button_sizes']['choices'] ) ) ) {
+				add_settings_error( self::SETTING_ID_BUTTON_SIZES, 'invalid-zh-size', __( 'Tampering with the radio input values is not allowed!', 'zhsocialsharing' ) );
+			}
+						
+			return $selected_options;
+		}
+		
 		public function sanitize_button_positions( $selected_options ) {
 			if ( ! isset( $selected_options ) ) {
 				add_settings_error( self::SETTING_ID_BUTTON_POSITIONS, 'invalid-zh-no-positions', __( 'At least one position needs to be selected for the buttons, which determines where they will be displayed on the page.', 'zhsocialsharing' ) );
@@ -125,7 +183,7 @@ if ( ! class_exists( 'ZH_Settings' ) ) :
 			$default_options = $this->get_settings_data();
 			
 			if ( array_diff( $selected_options, array_keys( $default_options['button_positions']['choices'] ) ) ) {
-				add_settings_error( self::SETTING_ID_BUTTON_POSITIONS, 'invalid-zh-positions', __( 'Tampering with the radio input values is not allowed!', 'zhsocialsharing' ) );
+				add_settings_error( self::SETTING_ID_BUTTON_POSITIONS, 'invalid-zh-positions', __( 'Tampering with the checkbox input values is not allowed!', 'zhsocialsharing' ) );
 			}
 						
 			return $selected_options;
@@ -284,7 +342,7 @@ if ( ! class_exists( 'ZH_Settings' ) ) :
 					break;
 					
 				case 'sort':
-				 	ZH_Button_Renderer::output_icons( get_option( $option['id'] ), get_option( self::SETTING_ID_CUSTOM_COLOR ), get_option( self::SETTING_ID_HEX_COLOR ), $option['id'] );				 	
+				 	ZH_Button_Renderer::output_buttons( get_option( $option['id'] ), get_option( self::SETTING_ID_HEX_COLOR ), get_option( self::SETTING_ID_BUTTON_SIZES ), get_option( self::SETTING_ID_CUSTOM_COLOR ), $option['id'] );				 	
 				?>
 				 	<p><em><?php echo esc_html( $option['desc'] ); ?></em></p>
 				<?php
@@ -347,7 +405,7 @@ if ( ! class_exists( 'ZH_Settings' ) ) :
 					'id'      		 	=> self::SETTING_ID_CUSTOM_COLOR,
 					'type'     			=> 'checkbox',
 					'sanitize_callback' => 'sanitize_checkbox',
-					'default'  			=> self::$default_is_custom_color,
+					'default'  			=> self::$default_has_custom_color,
 				),
 				
 				'hex_color' => array(
