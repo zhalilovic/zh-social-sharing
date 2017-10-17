@@ -79,12 +79,6 @@ if ( ! class_exists( 'ZH_Button_Renderer' ) ) :
 		    }
 		}
 		
-		public function remove_prefix( $prefix, $str ) {			
-			if (substr($str, 0, strlen($prefix)) == $prefix) {
-			    return $str = substr($str, strlen($prefix));
-			} 
-		}
-		
 		public function social_sharing_shortcode( $atts ) {
 			
 			extract( shortcode_atts( array(
