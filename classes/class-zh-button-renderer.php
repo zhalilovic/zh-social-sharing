@@ -12,14 +12,14 @@ if ( ! class_exists( 'ZH_Button_Renderer' ) ) :
 	class ZH_Button_Renderer {
 										
 		public function __construct() {
-			add_filter( 'the_content', array( $this, 'add_buttons_to_the_content' ) );
-			add_filter( 'the_title', array( $this, 'add_buttons_to_the_title' ), 10, 2 );
-			add_filter( 'post_thumbnail_html', array( $this, 'add_buttons_to_post_thumbnail_html' ), 10, 2 );
-			add_action( 'wp_footer', array( $this, 'add_left_floating_buttons' ) );
+			add_filter( 'the_content', array( $this, 'display_buttons_after_the_content' ) );
+			add_filter( 'the_title', array( $this, 'display_buttons_after_the_title' ), 10, 2 );
+			add_filter( 'post_thumbnail_html', array( $this, 'display_buttons_inside_the_post_thumbnail' ), 10, 2 );
+			add_action( 'wp_footer', array( $this, 'display_left_floating_buttons' ) );
 			add_shortcode( 'zh_social_sharing', array( $this, 'social_sharing_shortcode' ) );
 		}
 		
-		public function add_buttons_to_the_content( $content ) {
+		public function display_buttons_after_the_content( $content ) {
 			global $post;
 			
 			if( $this->is_allowed_post_type( $post->ID ) && is_singular() && is_main_query() && in_the_loop() ) {
@@ -29,7 +29,7 @@ if ( ! class_exists( 'ZH_Button_Renderer' ) ) :
 			return $content;
 		}
 		
-		public function add_buttons_to_the_title( $title, $id = NULL ) {
+		public function display_buttons_after_the_title( $title, $id = NULL ) {
 			/**
 		     * only apply the filter to the current page's title,
 		     * and not to the other title's on the current page
@@ -47,7 +47,7 @@ if ( ! class_exists( 'ZH_Button_Renderer' ) ) :
 			return $title;
 		}
 		
-		public function add_buttons_to_post_thumbnail_html( $html, $post_id ) {
+		public function display_buttons_inside_the_post_thumbnail( $html, $post_id ) {
 			if ( ! empty( $html ) && $this->is_allowed_post_type( $post_id ) && is_singular() && is_main_query() && in_the_loop() ) {
 				$html = '<div class="zh-social-sharing-thumbnail-wrap">' . $html . self::output_icons( get_option( ZH_Settings::SETTING_ID_BUTTON_ORDER ), get_option( ZH_Settings::SETTING_ID_CUSTOM_COLOR ), get_option( ZH_Settings::SETTING_ID_HEX_COLOR ) ) . '</div>';	
 			}
@@ -55,7 +55,7 @@ if ( ! class_exists( 'ZH_Button_Renderer' ) ) :
 			return $html;
 		}
 		
-		public function add_left_floating_buttons() {
+		public function display_left_floating_buttons() {
 			global $post;
 			
 			if( $this->is_allowed_post_type( $post->ID ) && is_singular() ) {
@@ -79,7 +79,15 @@ if ( ! class_exists( 'ZH_Button_Renderer' ) ) :
 		    }
 		}
 		
+		public function remove_prefix( $prefix, $str ) {			
+			if (substr($str, 0, strlen($prefix)) == $prefix) {
+			    return $str = substr($str, strlen($prefix));
+			} 
+		}
+		
 		public function social_sharing_shortcode( $atts ) {
+			$prefix = 'zh_';
+			
 			extract( shortcode_atts( array(
 				'social_networks' => get_option( ZH_Settings::SETTING_ID_SOCIAL_NETWORKS ),
 				'order' 		  => get_option( ZH_Settings::SETTING_ID_SOCIAL_NETWORKS ),
@@ -93,9 +101,11 @@ if ( ! class_exists( 'ZH_Button_Renderer' ) ) :
 			if( $tooltip == 'on' ) $tooltip = 1;
 			if( $tooltip == 'off' ) $tooltip = 0;
 			
-			ob_start();
+			// $defaults = new ZH_Default_Settings(); $defaults->get_default_social_networks();
 			
-		?><p><?php echo var_dump( $color ); ?></p><?php
+			ob_start();
+						
+		?><p><?php echo var_dump( $color ); var_dump( ZH_Settings::get_default_social_networks()); ?></p><?php
 			
 			$content = ob_get_clean();
 
