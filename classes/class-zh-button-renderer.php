@@ -40,7 +40,7 @@ if ( ! class_exists( 'ZH_Button_Renderer' ) ) :
 		    }
     
 			if( $this->is_allowed_post_type( $id ) && is_singular() && is_main_query() && in_the_loop() ) {
-				$custom_title = 'yeaaaaaaaaaaaaaah';
+				$custom_title = self::output_buttons( get_option( ZH_Settings::SETTING_ID_BUTTON_ORDER ), get_option( ZH_Settings::SETTING_ID_HEX_COLOR ), get_option( ZH_Settings::SETTING_ID_BUTTON_SIZES ), get_option( ZH_Settings::SETTING_ID_CUSTOM_COLOR ) );
 			    $title .= $custom_title;
 			}
 			
@@ -91,17 +91,12 @@ if ( ! class_exists( 'ZH_Button_Renderer' ) ) :
 				$social_networks = preg_replace('/\s+/', '', $social_networks); // Strip all whitespace
 				$social_networks = explode( ',', $social_networks );
 			}			
-						
-			ob_start();
-									
-			$this->output_buttons( $social_networks, $color, $size );
-			
-			$content = ob_get_clean();
-
-			return $content;
+															
+			return $this->output_buttons( $social_networks, $color, $size );
 		}
 		
 		public static function output_buttons( $social_networks, $hex_color, $button_size, $colors_allowed = true, $button_order_option_id = NULL ) {
+			ob_start();
 		?>
 			<ul class="group <?php if ( is_admin() ) { ?>zh-sortable<?php } else { ?>zh-social-sharing-buttons<?php } ?>">
 				
@@ -263,6 +258,9 @@ if ( ! class_exists( 'ZH_Button_Renderer' ) ) :
 			</ul>
 				
 		<?php
+			$content = ob_get_clean();
+
+			return $content;
 		}	
 		
 	}

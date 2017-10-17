@@ -342,7 +342,7 @@ if ( ! class_exists( 'ZH_Settings' ) ) :
 					break;
 					
 				case 'sort':
-				 	ZH_Button_Renderer::output_buttons( get_option( $option['id'] ), get_option( self::SETTING_ID_HEX_COLOR ), get_option( self::SETTING_ID_BUTTON_SIZES ), get_option( self::SETTING_ID_CUSTOM_COLOR ), $option['id'] );				 	
+				 	echo ZH_Button_Renderer::output_buttons( get_option( $option['id'] ), get_option( self::SETTING_ID_HEX_COLOR ), get_option( self::SETTING_ID_BUTTON_SIZES ), get_option( self::SETTING_ID_CUSTOM_COLOR ), $option['id'] );				 	
 				?>
 				 	<p><em><?php echo esc_html( $option['desc'] ); ?></em></p>
 				<?php
