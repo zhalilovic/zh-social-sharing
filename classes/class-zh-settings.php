@@ -27,7 +27,7 @@ if ( ! class_exists( 'ZH_Settings' ) ) :
 		/** Option defaults. */
 		private static $default_social_networks  = array( 'facebook', 'twitter', 'google_plus', 'pinterest', 'linkedin', 'whatsapp' );
 		private static $default_button_order 	 = array( 'zh-facebook', 'zh-twitter', 'zh-google_plus', 'zh-pinterest', 'zh-linkedin', 'zh-whatsapp' );
-		private static $default_custom_color 	 = false;
+		private static $default_is_custom_color	 = false;
 		private static $default_hex_color 		 = '#00c964'; // green
 		private static $default_button_size 	 = array( 'medium' );
 		private static $default_post_types 	     = array( 'post' );
@@ -42,7 +42,7 @@ if ( ! class_exists( 'ZH_Settings' ) ) :
 		}
 		
 		/** Refers to a single instance of this class. */
-		private static $instance 				 = null;
+		private static $instance = null;
 		
 		/**
 	     * Creates or returns an instance of this class.
@@ -76,7 +76,7 @@ if ( ! class_exists( 'ZH_Settings' ) ) :
  			foreach ( $default_options as $option ) {
  				if ( isset( $option['id'] ) ) {
 	 				register_setting( self::$settings_group_name, $option['id'], array( $this, $option['sanitize_callback'] ) );	 				
-	 				add_settings_field( $option['id'], $option['label'], array( $this, 'output_fields' ), $page, $this->settings_section, $option );
+	 				add_settings_field( $option['id'], $option['label'], array( $this, 'output_setting_fields' ), $page, $this->settings_section, $option );
 	 				
 	 				if ( false === get_option( $option['id'] ) ) { // Nothing yet saved
 	 					update_option( $option['id'], $option['default'] );
@@ -85,26 +85,19 @@ if ( ! class_exists( 'ZH_Settings' ) ) :
 	 			
  			}
 		}
-		
+				
 		public function sanitize_social_networks( $selected_options ) {
 			if ( ! isset( $selected_options ) ) {
 				add_settings_error( self::SETTING_ID_SOCIAL_NETWORKS, 'invalid-zh-no-social-networks', __( 'At least one social network needs to be selected for display.', 'zhsocialsharing' ) );
 				$selected_options = get_option( self::SETTING_ID_SOCIAL_NETWORKS ); // Set selected options to previously valid ones that are already in the database.
 			} 
 			
-			$social_networks_data = $this->get_single_option_data_set( self::SETTING_ID_SOCIAL_NETWORKS );
+			$default_options = $this->get_settings_data();
 			
-			if ( ! 'setting not found' ===  $social_networks_data ) {
-				
-				$all_social_network_names = array_keys( $social_networks_data['choices'] );
-				$contains_all_valid_social_networks = ! array_diff( $selected_options, $all_social_network_names );
-				
-				if ( ! $contains_all_valid_social_networks ) { 
-					add_settings_error( self::SETTING_ID_SOCIAL_NETWORKS, 'invalid-zh-social-networks', __( 'Tampering with the data is not allowed!', 'zhsocialsharing' ) );
-					$selected_options = get_option( self::SETTING_ID_SOCIAL_NETWORKS );
-				}
+			if ( array_diff( $selected_options, array_keys( $default_options['social_networks']['choices'] ) ) ) { // One or more submitted values are not one of the default, given values. Output error. 
+				add_settings_error( self::SETTING_ID_SOCIAL_NETWORKS, 'invalid-zh-social-networks', __( 'Tampering with the checkbox input values is not allowed!', 'zhsocialsharing' ) );
 			}
-			
+						
 			return $selected_options;
 		}
 		
@@ -114,17 +107,10 @@ if ( ! class_exists( 'ZH_Settings' ) ) :
 				$selected_options = get_option( self::SETTING_ID_POST_TYPES ); // Set selected options to previously valid ones that are already in the database.
 			} 
 			
-			$post_types_data = $this->get_single_option_data_set( self::SETTING_ID_POST_TYPES );
+			$default_options = $this->get_settings_data();
 			
-			if ( ! 'setting not found' ===  $post_types_data ) {
-				
-				$all_post_type_names = array_keys( $post_types_data['choices'] );
-				$contains_all_valid_post_types = ! array_diff( $selected_options, $all_post_type_names );
-				
-				if ( ! $contains_all_valid_post_types ) { 
-					add_settings_error( self::SETTING_ID_POST_TYPES, 'invalid-zh-post-types', __( 'Tampering with the data is not allowed!', 'zhsocialsharing' ) );
-					$selected_options = get_option( self::SETTING_ID_POST_TYPES );
-				}
+			if ( array_diff( $selected_options, array_keys( $default_options['post_types']['choices'] ) ) ) {
+				add_settings_error( self::SETTING_ID_POST_TYPES, 'invalid-zh-post-types', __( 'Tampering with the checkbox input values is not allowed!', 'zhsocialsharing' ) );
 			}
 			
 			return $selected_options;
@@ -136,19 +122,12 @@ if ( ! class_exists( 'ZH_Settings' ) ) :
 				$selected_options = get_option( self::SETTING_ID_BUTTON_POSITIONS ); // Set selected options to previously valid ones that are already in the database.
 			} 
 			
-			$button_positions_data = $this->get_single_option_data_set( self::SETTING_ID_BUTTON_POSITIONS );
+			$default_options = $this->get_settings_data();
 			
-			if ( ! 'setting not found' ===  $button_positions_data ) {
-				
-				$all_button_positions = array_keys( $button_positions_data['choices'] );
-				$contains_all_valid_button_positions = ! array_diff( $selected_options, $all_button_positions );
-				
-				if ( ! $contains_all_valid_button_positions ) { 
-					add_settings_error( self::SETTING_ID_POST_TYPES, 'invalid-zh-positions', __( 'Tampering with the data is not allowed!', 'zhsocialsharing' ) );
-					$selected_options = get_option( self::SETTING_ID_POST_TYPES );
-				}
+			if ( array_diff( $selected_options, array_keys( $default_options['button_positions']['choices'] ) ) ) {
+				add_settings_error( self::SETTING_ID_BUTTON_POSITIONS, 'invalid-zh-positions', __( 'Tampering with the radio input values is not allowed!', 'zhsocialsharing' ) );
 			}
-			
+						
 			return $selected_options;
 		}
 		
@@ -164,7 +143,7 @@ if ( ! class_exists( 'ZH_Settings' ) ) :
 			sort( $default_button_order );
 			sort( $current_button_order );
 			
-			if ( $default_button_order !== $current_button_order ) { //equal}
+			if ( $default_button_order !== $current_button_order ) { // equal}
 				add_settings_error( self::SETTING_ID_BUTTON_ORDER, 'invalid-zh-button-order', __( 'Tampering with the data is not allowed!', 'zhsocialsharing' ) );
 				$settings = get_option( self::SETTING_ID_BUTTON_ORDER ); // Set selected options to previously valid ones that are already in the database.	
 			}
@@ -198,7 +177,7 @@ if ( ! class_exists( 'ZH_Settings' ) ) :
 			return 'setting not found';
 		}
 		
-		public function output_fields( $option ) {
+		public function output_setting_fields( $option ) {
 			if ( ! isset( $option['type'] ) ) {
 				continue;
 			}
@@ -342,7 +321,7 @@ if ( ! class_exists( 'ZH_Settings' ) ) :
 					'id'          		=> self::SETTING_ID_SOCIAL_NETWORKS,
 					'type'        	    => 'checkbox_multiple',
 					'sanitize_callback' => 'sanitize_social_networks',
-					'default'     		=> array( 'facebook', 'twitter', 'google_plus', 'pinterest', 'linkedin', 'whatsapp' ),
+					'default'     		=> self::$default_social_networks,
 					'choices'    	 	=> array(
 						'facebook'    => __( 'Facebook', 'zhsocialsharing' ),
 						'twitter'     => __( 'Twitter', 'zhsocialsharing' ),
@@ -359,7 +338,7 @@ if ( ! class_exists( 'ZH_Settings' ) ) :
 					'id'          		=> self::SETTING_ID_BUTTON_ORDER,
 					'type'        	    => 'sort',
 					'sanitize_callback' => 'sanitize_button_order',
-					'default'     		=> array( 'zh-facebook', 'zh-twitter', 'zh-google_plus', 'zh-pinterest', 'zh-linkedin', 'zh-whatsapp' ),
+					'default'     		=> self::$default_button_order,
 				),
 				
 				'custom_color' => array(
@@ -368,7 +347,7 @@ if ( ! class_exists( 'ZH_Settings' ) ) :
 					'id'      		 	=> self::SETTING_ID_CUSTOM_COLOR,
 					'type'     			=> 'checkbox',
 					'sanitize_callback' => 'sanitize_checkbox',
-					'default'  			=> false,
+					'default'  			=> self::$default_is_custom_color,
 				),
 				
 				'hex_color' => array(
@@ -377,7 +356,7 @@ if ( ! class_exists( 'ZH_Settings' ) ) :
 					'id'       			=> self::SETTING_ID_HEX_COLOR ,
 					'type'     			=> 'color',
 					'sanitize_callback' => 'sanitize_hex_color',
-					'default'  			=> '#00c964',
+					'default'  			=> self::$default_hex_color,
 				),
 				
 				'button_sizes' => array(
@@ -385,7 +364,7 @@ if ( ! class_exists( 'ZH_Settings' ) ) :
 					'id'      			=> self::SETTING_ID_BUTTON_SIZES,
 					'type'     			=> 'radio',
 					'sanitize_callback' => 'sanitize_button_sizes',
-					'default'  			=> array( 'medium' ),
+					'default'  			=> self::$default_button_size,
 					'choices'  			=> array(
 						'small'  => __( 'Small', 'zhsocialsharing' ),
 						'medium' => __( 'Medium', 'zhsocialsharing' ),
@@ -398,7 +377,7 @@ if ( ! class_exists( 'ZH_Settings' ) ) :
 					'id'      			=> self::SETTING_ID_POST_TYPES,
 					'type'    			=> 'checkbox_multiple',
 					'sanitize_callback' => 'sanitize_post_types',
-					'default' 			=> array( 'post' ),
+					'default' 			=> self::$default_post_types,
 					'choices' 			=> $this->get_post_type_choices(),	
 				),
 				
@@ -408,7 +387,7 @@ if ( ! class_exists( 'ZH_Settings' ) ) :
 					'id'          		=> self::SETTING_ID_BUTTON_POSITIONS,
 					'type'        	    => 'checkbox_multiple',
 					'sanitize_callback' => 'sanitize_button_positions',
-					'default'     		=> array( 'after_post_title', 'after_post_content' ),
+					'default'     		=> self::$default_button_positions,
 					'choices'    	 	=> array(
 						'after_post_title'      => __( 'Below the post title', 'zhsocialsharing' ),
 						'float_left'            => __( 'Floating on the left area', 'zhsocialsharing' ),
