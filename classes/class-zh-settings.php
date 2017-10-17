@@ -11,21 +11,38 @@ if ( ! class_exists( 'ZH_Settings' ) ) :
 
 	class ZH_Settings {
 		
-		private $settings_data = array();
-		private static $settings_group_name = 'zh-social-sharing-options'; 
-		private $settings_section = 'zh-main-settings';
+		private static $settings_data 			 = array();
+		private static $settings_group_name 	 = 'zh-social-sharing-options'; 
+		private $settings_section 				 = 'zh-main-settings';
 		
-		/** Options names. */
-		const SETTING_ID_SOCIAL_NETWORKS  = 'zh_social_networks';
-		const SETTING_ID_BUTTON_ORDER     = 'zh_button_order';
-		const SETTING_ID_CUSTOM_COLOR     = 'zh_custom_color';
-		const SETTING_ID_HEX_COLOR        = 'zh_hex_color';
-		const SETTING_ID_BUTTON_SIZES     = 'zh_button_sizes';
-		const SETTING_ID_POST_TYPES       = 'zh_post_types';
-		const SETTING_ID_BUTTON_POSITIONS = 'zh_button_positions';
+		/** Option names. */
+		const SETTING_ID_SOCIAL_NETWORKS  		 = 'zh_social_networks';
+		const SETTING_ID_BUTTON_ORDER     		 = 'zh_button_order';
+		const SETTING_ID_CUSTOM_COLOR     		 = 'zh_custom_color';
+		const SETTING_ID_HEX_COLOR        		 = 'zh_hex_color';
+		const SETTING_ID_BUTTON_SIZES     		 = 'zh_button_sizes';
+		const SETTING_ID_POST_TYPES       		 = 'zh_post_types';
+		const SETTING_ID_BUTTON_POSITIONS 		 = 'zh_button_positions';
+		
+		/** Option defaults. */
+		private static $default_social_networks  = array( 'facebook', 'twitter', 'google_plus', 'pinterest', 'linkedin', 'whatsapp' );
+		private static $default_button_order 	 = array( 'zh-facebook', 'zh-twitter', 'zh-google_plus', 'zh-pinterest', 'zh-linkedin', 'zh-whatsapp' );
+		private static $default_custom_color 	 = false;
+		private static $default_hex_color 		 = '#00c964'; // green
+		private static $default_button_size 	 = array( 'medium' );
+		private static $default_post_types 	     = array( 'post' );
+		private static $default_button_positions = array( 'after_post_title', 'after_post_content' );
+		
+		public static function get_default_social_networks() {
+			return self::$default_social_networks;
+		}
+		
+		public static function set_default_social_networks( $value ) {
+			self::$default_social_networks = $value;
+		}
 		
 		/** Refers to a single instance of this class. */
-		private static $instance = null;
+		private static $instance 				 = null;
 		
 		/**
 	     * Creates or returns an instance of this class.
@@ -53,6 +70,7 @@ if ( ! class_exists( 'ZH_Settings' ) ) :
  			
  			add_settings_section( $this->settings_section, $plugin_data['Name'], '', $page );
  			
+ 			$this->set_settings_data();
  			$default_options = $this->get_settings_data();
  			
  			foreach ( $default_options as $option ) {
@@ -315,7 +333,7 @@ if ( ! class_exists( 'ZH_Settings' ) ) :
 			endswitch;		
 		}
 		
-		public function get_settings_data() {			
+		public function set_settings_data() {			
 			$this->settings_data = array(
 				
 				'social_networks' => array(
@@ -401,7 +419,9 @@ if ( ! class_exists( 'ZH_Settings' ) ) :
 
 				
 			);
-			
+		}
+		
+		public function get_settings_data() {
 			return $this->settings_data;
 		}
 		
