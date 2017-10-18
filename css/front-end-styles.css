@@ -1,25 +1,135 @@
+.group:after {
+	content: "";
+	display: table;
+	clear: both;
+}
+
 ul.zh-social-sharing-buttons {
 	list-style: none inside none;
 	padding: 0;
-	margin: 0;
+	margin: 0 0 1.375rem 0; /* 0 0 22px 0 */
 }
-ul.zh-social-sharing-buttons li {
-	float: left;
-	width: 35px;
-	margin-right: 5px;
-}
+	.zh-social-sharing-buttons li {
+		float: left;
+		margin-right: 6px;
+		margin-bottom: 6px;
+	}
+		.zh-social-sharing-buttons a,
+		.zh-social-sharing-buttons svg {
+			display: block;
+		}
+		.zh-social-sharing-buttons .zh-social-sharing-links {	
+			box-shadow: none !important;
+			border: none !important;
+					
+			color: white;
+			font-weight: normal;
+			text-decoration: none !important;
+
+			transition: .2s all;
+		}
+			.zh-social-sharing-buttons .zh-social-sharing-links:hover,
+			.zh-social-sharing-buttons .zh-social-sharing-links:focus,
+			.zh-social-sharing-buttons .zh-social-sharing-links:active {
+				box-shadow: none !important;
+				border: none !important;
+				
+				color: white;
+				text-decoration: none !important;
+				
+				opacity: 0.7;
+			} 
+				.zh-social-sharing-buttons .zh-social-sharing-links svg {
+					float: left;
+				}
+				.zh-social-sharing-buttons .zh-social-sharing-links .zh-social-network-names {
+					float: left;
+					display: block;
+					padding: 0 12px 0 2px;
+					
+					font-size: 12px;
+					
+				}
+				.zh-social-sharing-buttons .zh-social-sharing-links.zh-small-button-size svg {
+					width: 30px;
+					height: 30px;
+				}
+				.zh-social-sharing-buttons .zh-social-sharing-links.zh-small-button-size .zh-social-network-names {
+					height: 30px;
+					
+					line-height: 30px;
+				}
+				.zh-social-sharing-buttons .zh-social-sharing-links.zh-medium-button-size svg {
+					width: 40px;
+					height: 40px;
+				}
+				.zh-social-sharing-buttons .zh-social-sharing-links.zh-medium-button-size .zh-social-network-names {
+					height: 40px;
+					padding: 0 14px 0 2px;
+					
+					line-height: 40px;
+				}
+				.zh-social-sharing-buttons .zh-social-sharing-links.zh-large-button-size svg {
+					width: 50px;
+					height: 50px;
+				}
+				.zh-social-sharing-buttons .zh-social-sharing-links.zh-large-button-size .zh-social-network-names {
+					height: 50px;
+					padding: 0 16px 0 2px;
+					
+					line-height: 50px;
+				}		
 
 .zh-social-sharing-thumbnail-wrap {
 	position: relative;
 }
-.zh-social-sharing-thumbnail-wrap ul.zh-social-sharing-buttons {
-	position: absolute;
-	top: 20px;
-	left: 20px;
+	.zh-social-sharing-thumbnail-wrap ul.zh-social-sharing-buttons {
+		position: absolute;
+		bottom: 14px;
+		left: 20px;
+		margin-bottom: 0;
+	}
+	
+ul.zh-social-sharing-buttons.zh-title-buttons {
+	margin: 0.875rem 0 0 0; /* 14px 0 0 0 */
 }
 
+ul.zh-social-sharing-buttons.zh-floating-buttons {
+	position: fixed;
+	top: 50%;
+	left: 0;
+	
+	transform: translateY( -50% );
+}
+	.zh-social-sharing-buttons.zh-floating-buttons li {
+		float: none;
+		margin-right: 0;
+		margin-bottom: 0;
+	}
+		.zh-social-sharing-buttons.zh-floating-buttons .zh-social-sharing-links:hover,
+		.zh-social-sharing-buttons.zh-floating-buttons .zh-social-sharing-links:focus,
+		.zh-social-sharing-buttons.zh-floating-buttons .zh-social-sharing-links:active {
+			opacity: 1;
+		} 
+			.zh-social-sharing-buttons.zh-floating-buttons .zh-social-network-names {
+				position: relative;
+				z-index: -1;
+				
+				transition: all 0.4s;
+				
+				-webkit-transform: translate3d( -100%, 0, 0 );
+				transform: translate3d( -100%, 0, 0 );
+			}
+				.zh-social-sharing-buttons.zh-floating-buttons .zh-social-sharing-links:hover .zh-social-network-names,
+				.zh-social-sharing-buttons.zh-floating-buttons .zh-social-sharing-links:focus .zh-social-network-names,
+				.zh-social-sharing-buttons.zh-floating-buttons .zh-social-sharing-links:active .zh-social-network-names {					
+					-webkit-transform: translate3d( 0, 0, 0 );
+					transform: translate3d( 0, 0, 0 );
+				}
+
+
 .whatsapp-hide-mobile {
-	display: none; /* Hide the whatsapp icon on mobile devices */
+	display: none !important; /* Hide the whatsapp icon on mobile devices */
 }
  
  

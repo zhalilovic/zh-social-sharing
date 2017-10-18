@@ -36,6 +36,7 @@ if ( ! class_exists( 'ZH_Initializer' ) ) :
 			add_action( 'admin_menu', array( $this, 'add_menu_item' ), 10 );	
 			add_action( 'admin_enqueue_scripts', array( $this, 'load_admin_assets' ), 20 );
 			add_action( 'wp_enqueue_scripts', array( $this, 'load_front_end_assets' ) );
+			add_action( 'wp_head', array( $this, 'add_inline_scripts' ) );
 			add_filter( 'plugin_action_links_' . ZH_PLUGIN_BASENAME, array( $this, 'add_settings_link' ) );
 		}
 		
@@ -62,14 +63,48 @@ if ( ! class_exists( 'ZH_Initializer' ) ) :
 				wp_enqueue_style( 'jquery-ui-sortable' );
 				wp_enqueue_style( 'zh-admin-option-styles', ZH_PLUGIN_URL . 'css/admin-option-styles.css' );
 				
-				wp_enqueue_script( 'zh-jquery-custom', ZH_PLUGIN_URL . 'js/jquery.custom.js', array( 'wp-color-picker', 'jquery-ui-sortable' ), false, true );
+				wp_enqueue_script( 'zh-jquery-custom', ZH_PLUGIN_URL . 'js/jquery.admin.js', array( 'wp-color-picker', 'jquery-ui-sortable' ), false, true );
 			}
 		}
 		
 		public function load_front_end_assets() {
-			if ( ! is_admin() && is_singular() ) {
+			if ( ! is_admin() ) {
 				wp_enqueue_style( 'zh-front-end-styles', ZH_PLUGIN_URL . 'css/front-end-styles.css' );
+				wp_enqueue_script( 'zh-front-end-script', ZH_PLUGIN_URL . 'js/jquery.front-end.js' );
 			}	
+		}
+		
+		public function add_inline_scripts() {
+			ob_start();
+		?>
+		<?php 
+			/*
+			<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+ 
+			<script>(function(d, s, id) {
+			  var js, fjs = d.getElementsByTagName(s)[0];
+			  if (d.getElementById(id)) return;
+			  js = d.createElement(s); js.id = id;
+			  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.0";
+			  fjs.parentNode.insertBefore(js, fjs);
+			}(document, 'script', 'facebook-jssdk'));</script>
+			 
+			<script type="text/javascript">
+			  (function() {
+			    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+			    po.src = 'https://apis.google.com/js/platform.js';
+			    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+			  })();
+			</script>
+			 
+			<script async defer src="//assets.pinterest.com/js/pinit.js"></script>
+			 
+			<script src="//platform.linkedin.com/in.js" type="text/javascript"> lang: en_US</script>
+		<?php
+			$content = ob_get_clean();
+			
+			echo $content;
+			*/
 		}
 		
 		public function load_textdomain() {

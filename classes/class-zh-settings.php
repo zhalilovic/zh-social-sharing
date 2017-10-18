@@ -170,6 +170,10 @@ if ( ! class_exists( 'ZH_Settings' ) ) :
 			if ( array_diff( $selected_options, array_keys( $default_options['button_sizes']['choices'] ) ) ) {
 				add_settings_error( self::SETTING_ID_BUTTON_SIZES, 'invalid-zh-size', __( 'Tampering with the radio input values is not allowed!', 'zhsocialsharing' ) );
 			}
+			
+			if( is_array( $selected_options ) ) {
+				$selected_options = implode( ' ', $selected_options );	
+			}
 						
 			return $selected_options;
 		}
@@ -312,7 +316,7 @@ if ( ! class_exists( 'ZH_Settings' ) ) :
 									name="<?php echo esc_attr( $option['id'] ); ?>[]" 
 									type="radio" 
 									value="<?php echo esc_attr( $key ); ?>" 
-									<?php checked( in_array( $key, get_option( $option['id'] ) ), true ); ?>
+									<?php checked( ( $key == get_option( $option['id'] ) ), true ); ?>
 								/>
 								<span><?php echo esc_html( $checkbox_label ); ?></span>
 							</label>
@@ -342,7 +346,14 @@ if ( ! class_exists( 'ZH_Settings' ) ) :
 					break;
 					
 				case 'sort':
-				 	echo ZH_Button_Renderer::output_buttons( get_option( $option['id'] ), get_option( self::SETTING_ID_HEX_COLOR ), get_option( self::SETTING_ID_BUTTON_SIZES ), get_option( self::SETTING_ID_CUSTOM_COLOR ), $option['id'] );				 	
+				 	echo ZH_Button_Renderer::output_buttons( 
+				 		get_option( $option['id'] ), 
+				 		get_option( self::SETTING_ID_HEX_COLOR ), 
+				 		get_option( self::SETTING_ID_BUTTON_SIZES ), 
+				 		get_option( self::SETTING_ID_CUSTOM_COLOR ), 
+				 		NULL,
+				 		$option['id'] 
+				 	);				 	
 				?>
 				 	<p><em><?php echo esc_html( $option['desc'] ); ?></em></p>
 				<?php
