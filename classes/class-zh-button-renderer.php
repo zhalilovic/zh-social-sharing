@@ -64,8 +64,8 @@ if ( ! class_exists( 'ZH_Button_Renderer' ) ) :
 			}
 			
 			return $title;
-		}
-		
+		} 
+         		
 		public function display_buttons_inside_the_post_thumbnail( $html, $post_id ) {
 			if ( ! empty( $html ) && $this->is_allowed_post_type( $post_id ) && $this->is_button_position_active( 'inside_featured_image' ) && is_singular() && is_main_query() && in_the_loop() ) {
 				$custom_output  = '<div class="zh-social-sharing-thumbnail-wrap">';
@@ -99,7 +99,7 @@ if ( ! class_exists( 'ZH_Button_Renderer' ) ) :
 		
 		public function is_allowed_post_type( $post_id ) {
 		    if ( $post_id ) {
-				$allowed_post_types = get_option( ZH_Settings::SETTING_ID_POST_TYPES ); 
+				$allowed_post_types = (array) get_option( ZH_Settings::SETTING_ID_POST_TYPES ); 
 				
 		        if ( in_array( get_post_type( $post_id ), $allowed_post_types ) ) {
 		            return true;
@@ -114,7 +114,7 @@ if ( ! class_exists( 'ZH_Button_Renderer' ) ) :
 		}
 		
 		public function is_button_position_active( $position ) {				
-	        if ( in_array( $position, get_option( ZH_Settings::SETTING_ID_BUTTON_POSITIONS ) ) ) {
+	        if ( in_array( $position, (array) get_option( ZH_Settings::SETTING_ID_BUTTON_POSITIONS ) ) ) {
 	            return true;
 	        }
 	        else {

@@ -11,7 +11,7 @@ if ( ! class_exists( 'ZH_Settings' ) ) :
 
 	class ZH_Settings {
 		
-		private static $settings_data 			 = array();
+		private $settings_data 			 		 = array();
 		private static $settings_group_name 	 = 'zh-social-sharing-options'; 
 		private $settings_section 				 = 'zh-main-settings';
 		
@@ -191,7 +191,7 @@ if ( ! class_exists( 'ZH_Settings' ) ) :
 				add_settings_error( 
 					self::SETTING_ID_BUTTON_POSITIONS, 
 					'zh-no-positions', 
-					__( 'Settings saved. Please be aware that the sharing buttons will not display on your site (unless a shortcode is used) because you have chosen to disable all of the available positions where the buttons can automatically display.', 'zhsocialsharing' ),
+					__( 'Settings saved. Please be aware that the sharing buttons will not display on your site (unless a shortcode is used) because you have chosen to disable all of the available positions where the buttons can display.', 'zhsocialsharing' ),
 					'updated' 
 				);
 			} 
@@ -297,7 +297,7 @@ if ( ! class_exists( 'ZH_Settings' ) ) :
 									name="<?php echo esc_attr( $option['id'] ); ?>[]" 
 									type="checkbox" 
 									value="<?php echo esc_attr( $key ); ?>" 
-									<?php checked( in_array( $key, get_option( $option['id'] ) ), true ); ?> 
+									<?php checked( in_array( $key, (array) get_option( $option['id'] ) ), true ); ?> 
 								/>
 								<span><?php echo esc_html( $checkbox_label ); ?></span>
 							</label>
