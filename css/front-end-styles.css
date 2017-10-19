@@ -85,8 +85,8 @@ ul.zh-social-sharing-buttons {
 }
 	.zh-social-sharing-thumbnail-wrap ul.zh-social-sharing-buttons {
 		position: absolute;
-		bottom: 14px;
-		left: 20px;
+		bottom: 1.5rem; /* 24px */
+		left: 1.875rem; /* 30px */
 		margin-bottom: 0;
 	}
 	

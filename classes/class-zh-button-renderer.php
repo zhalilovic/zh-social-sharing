@@ -69,6 +69,7 @@ if ( ! class_exists( 'ZH_Button_Renderer' ) ) :
 		public function display_buttons_inside_the_post_thumbnail( $html, $post_id ) {
 			if ( ! empty( $html ) && $this->is_allowed_post_type( $post_id ) && $this->is_button_position_active( 'inside_featured_image' ) && is_singular() && is_main_query() && in_the_loop() ) {
 				$custom_output  = '<div class="zh-social-sharing-thumbnail-wrap">';
+				// $custom_output .= get_the_title();
 				$custom_output .= $html;
 				$custom_output .= self::output_buttons( 
 					get_option( ZH_Settings::SETTING_ID_SOCIAL_NETWORKS ), 
@@ -145,9 +146,9 @@ if ( ! class_exists( 'ZH_Button_Renderer' ) ) :
 			if ( ! is_admin() ) { 
 				// Get current page URL
 				$url = urlencode( get_permalink( $post->ID ) );
-								
+				
 				// Get current page title
-				$the_title = str_replace( ' ', '%20', get_the_title( $post->ID ) );
+				$the_title = urlencode( html_entity_decode( single_post_title( '', false ), ENT_COMPAT, 'UTF-8' ) ); // Use single_post_title to retrieve title in order not to evoke the_title filter.
 			
 				// Get Post Thumbnail for pinterest
 				$post_thumbnail = wp_get_attachment_image_src( get_post_thumbnail_id( $post->ID ), 'full' );
@@ -161,26 +162,23 @@ if ( ! class_exists( 'ZH_Button_Renderer' ) ) :
 				$whatsappURL = 'whatsapp://send?text=' . $the_title . ' ' . $url;
 			}
 			
+			if ( is_admin() ) { 
+				$ul_class = 'zh-sortable';	
+			} 
+			else { 
+				$ul_class = 'zh-social-sharing-buttons';
+			}
+			
+			if ( isset( $source_class ) ) { 
+				$ul_class .= ' ' . $source_class;
+			}
+			
 		?>
-			<ul class="group 
-				<?php 
-				if ( is_admin() ) { 
-					echo 'zh-sortable';	
-				} 
-				else { 
-					echo "zh-social-sharing-buttons";
-				}
-				
-				if ( isset( $source_class ) ) { 
-					echo ' ' . esc_attr( $source_class );
-				}
-				?>"
-			>
+			<ul class="group <?php echo esc_attr( $ul_class ); ?>">
 				
 				<?php foreach ( $social_networks as $social_network ) : ?>
 								
-					<li id="<?php echo esc_attr( $social_network ); ?>" 
-						<?php if ( ! wp_is_mobile() && ( $social_network === 'zh-whatsapp' || $social_network === 'whatsapp' ) ) { ?>class="whatsapp-hide-mobile"<?php } ?>>
+					<li id="<?php echo esc_attr( $social_network ); ?>" <?php if ( ! wp_is_mobile() && ( $social_network === 'zh-whatsapp' || $social_network === 'whatsapp' ) ) { ?>class="whatsapp-hide-mobile"<?php } ?>>
 					
 						<?php if ( is_admin() ) : ?>
 							<input  
