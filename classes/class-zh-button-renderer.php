@@ -133,7 +133,13 @@ if ( ! class_exists( 'ZH_Button_Renderer' ) ) :
 			if ( is_string( $social_networks ) ) {
 				$social_networks = preg_replace('/\s+/', '', $social_networks); // Strip all whitespace
 				$social_networks = explode( ',', $social_networks );
-			}			
+			}	
+			
+			if ( ! sanitize_hex_color( $color ) ) {
+				$color = '';
+			}	
+			
+			$size = sanitize_html_class( preg_replace('/\s+/', '', $size), ZH_Settings::get_default_button_size() ); // Strip all whitespace	
 															
 			return $this->output_buttons( $social_networks, $color, $size );
 		}
