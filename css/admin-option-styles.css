@@ -5,21 +5,30 @@
 }
 
 .zh-social-sharing .form-table th {
-	padding-right: 3.75rem; /* 60px / 16px */
-	padding-right: 60px;
+	padding-right: 50px;
+	padding-right: 3.125rem; /* 50px / 16px */
+}
+	.zh-social-sharing ul.zh-sortable {
+		margin-bottom: 0;
+	}
+		.zh-social-sharing ul.zh-sortable li {
+			float: left;
+			width: 60px;
+			margin-right: 5px;
+		}
+	.zh-social-sharing .wp-picker-container {
+		margin-bottom: 6px;
+	}
+	
+.zh-social-sharing .shortcode-example span {
+	display: inline-block;
+	padding: 5px 10px 4px;
+	
+	border-left: 3px solid #dd672c;
+	
+	background: white;
+	color: #000;
 }
 
-ul.zh-sortable {
-	margin-bottom: 0;
-}
-ul.zh-sortable li {
-	float: left;
-	width: 60px;
-	margin-right: 5px;
-}
-
-.zh-social-sharing .wp-picker-container {
-	margin-bottom: 6px;
-}
  
  

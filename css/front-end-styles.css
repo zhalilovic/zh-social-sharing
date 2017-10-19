@@ -59,11 +59,13 @@ ul.zh-social-sharing-buttons {
 					
 					line-height: 30px;
 				}
-				.zh-social-sharing-buttons .zh-social-sharing-links.zh-medium-button-size svg {
+				.zh-social-sharing-buttons .zh-social-sharing-links.zh-medium-button-size svg,
+				.zh-social-sharing-buttons .zh-social-sharing-links svg {
 					width: 40px;
 					height: 40px;
 				}
-				.zh-social-sharing-buttons .zh-social-sharing-links.zh-medium-button-size .zh-social-network-names {
+				.zh-social-sharing-buttons .zh-social-sharing-links.zh-medium-button-size .zh-social-network-names,
+				.zh-social-sharing-buttons .zh-social-sharing-links .zh-social-network-names {
 					height: 40px;
 					padding: 0 14px 0 2px;
 					
