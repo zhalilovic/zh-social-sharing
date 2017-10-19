@@ -136,8 +136,12 @@ if ( ! class_exists( 'ZH_Settings' ) ) :
 				
 		public function sanitize_social_networks( $selected_options ) {
 			if ( ! isset( $selected_options ) ) {
-				add_settings_error( self::SETTING_ID_SOCIAL_NETWORKS, 'invalid-zh-no-social-networks', __( 'At least one social network needs to be selected for display.', 'zhsocialsharing' ) );
-				$selected_options = get_option( self::SETTING_ID_SOCIAL_NETWORKS ); // Set selected options to previously valid ones that are already in the database.
+				add_settings_error( 
+					self::SETTING_ID_SOCIAL_NETWORKS, 
+					'zh-no-social-networks', 
+					__( 'Settings saved. Please be aware that the sharing buttons will not display on your site (unless a shortcode is used) because you have chosen to disable all of the social networks.', 							'zhsocialsharing' ), 
+					'updated' 
+				);
 			} 
 			
 			$default_options = $this->get_settings_data();
@@ -151,8 +155,12 @@ if ( ! class_exists( 'ZH_Settings' ) ) :
 		
 		public function sanitize_post_types( $selected_options ) {
 			if ( ! isset( $selected_options ) ) {
-				add_settings_error( self::SETTING_ID_POST_TYPES, 'invalid-zh-no-post-types', __( 'At least one Post Type needs to be selected, where the buttons will show.', 'zhsocialsharing' ) );
-				$selected_options = get_option( self::SETTING_ID_POST_TYPES ); // Set selected options to previously valid ones that are already in the database.
+				add_settings_error( 
+					self::SETTING_ID_POST_TYPES, 
+					'zh-no-post-types', 
+					__( 'Settings saved. Please be aware that the sharing buttons will not display on your site (unless a shortcode is used) because you have chosen to disable all of the available post types.', 'zhsocialsharing' ), 
+					'updated'
+				);
 			} 
 			
 			$default_options = $this->get_settings_data();
@@ -180,8 +188,12 @@ if ( ! class_exists( 'ZH_Settings' ) ) :
 		
 		public function sanitize_button_positions( $selected_options ) {
 			if ( ! isset( $selected_options ) ) {
-				add_settings_error( self::SETTING_ID_BUTTON_POSITIONS, 'invalid-zh-no-positions', __( 'At least one position needs to be selected for the buttons, which determines where they will be displayed on the page.', 'zhsocialsharing' ) );
-				$selected_options = get_option( self::SETTING_ID_BUTTON_POSITIONS ); // Set selected options to previously valid ones that are already in the database.
+				add_settings_error( 
+					self::SETTING_ID_BUTTON_POSITIONS, 
+					'zh-no-positions', 
+					__( 'Settings saved. Please be aware that the sharing buttons will not display on your site (unless a shortcode is used) because you have chosen to disable all of the available positions where the buttons can automatically display.', 'zhsocialsharing' ),
+					'updated' 
+				);
 			} 
 			
 			$default_options = $this->get_settings_data();
