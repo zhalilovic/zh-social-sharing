@@ -98,6 +98,7 @@ ul.zh-social-sharing-buttons.zh-floating-buttons {
 	position: fixed;
 	top: 50%;
 	left: 0;
+	z-index: 9999;
 	
 	transform: translateY( -50% );
 }
