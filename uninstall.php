@@ -4,7 +4,7 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
     die;
 }
 
-require( 'inc/class-zh-settings.php' );
+require_once( 'inc/class-zh-settings.php' );
  
 delete_option( ZH_Settings::SETTING_ID_SOCIAL_NETWORKS );
 delete_option( ZH_Settings::SETTING_ID_BUTTON_ORDER );
