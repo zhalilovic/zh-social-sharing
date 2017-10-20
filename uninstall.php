@@ -3,6 +3,8 @@
 if (!defined('WP_UNINSTALL_PLUGIN')) {
     die;
 }
+
+require( 'classes/class-zh-settings.php' );
  
 delete_option( ZH_Settings::SETTING_ID_SOCIAL_NETWORKS );
 delete_option( ZH_Settings::SETTING_ID_BUTTON_ORDER );
