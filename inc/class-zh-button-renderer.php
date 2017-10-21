@@ -203,7 +203,7 @@ if ( ! class_exists( 'ZH_Button_Renderer' ) ) :
 						?>
 									
 							<?php if ( ! is_admin() ) { ?>
-							<a href="<?php echo $facebookURL; ?>" class="zh-social-sharing-links zh-<?php echo esc_attr( $button_size ); ?>-button-size" rel="external nofollow" target="_blank">
+							<a href="<?php echo $facebookURL; ?>" class="zh-social-sharing-links zh-<?php echo esc_attr( $button_size ); ?>-button-size group" rel="external nofollow" target="_blank">
 							<?php } ?>
 					
 								<svg version="1.1" id="<?php echo esc_attr( $social_network ); ?>-icon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
@@ -235,7 +235,7 @@ if ( ! class_exists( 'ZH_Button_Renderer' ) ) :
 							?>
 								
 								<?php if ( ! is_admin() ) { ?>
-								<a href="<?php echo $twitterURL; ?>" class="zh-social-sharing-links zh-<?php echo esc_attr( $button_size ); ?>-button-size" rel="external nofollow" target="_blank">
+								<a href="<?php echo $twitterURL; ?>" class="zh-social-sharing-links zh-<?php echo esc_attr( $button_size ); ?>-button-size group" rel="external nofollow" target="_blank">
 								<?php } ?>
 								
 									<svg version="1.1" id="<?php echo esc_attr( $social_network ); ?>-icon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
@@ -272,7 +272,7 @@ if ( ! class_exists( 'ZH_Button_Renderer' ) ) :
 							?>
 								
 								<?php if ( ! is_admin() ) { ?>
-								<a href="<?php echo $googleURL; ?>" class="zh-social-sharing-links zh-<?php echo esc_attr( $button_size ); ?>-button-size" rel="external nofollow" target="_blank">
+								<a href="<?php echo $googleURL; ?>" class="zh-social-sharing-links zh-<?php echo esc_attr( $button_size ); ?>-button-size group" rel="external nofollow" target="_blank">
 								<?php } ?>
 								
 									<svg version="1.1" id="<?php echo esc_attr( $social_network ); ?>-icon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
@@ -317,7 +317,7 @@ if ( ! class_exists( 'ZH_Button_Renderer' ) ) :
 							?>
 								
 								<?php if ( ! is_admin() ) { ?>
-								<a href="<?php echo $pinterestURL; ?>" class="zh-social-sharing-links zh-<?php echo esc_attr( $button_size ); ?>-button-size" rel="external nofollow" target="_blank">
+								<a href="<?php echo $pinterestURL; ?>" class="zh-social-sharing-links zh-<?php echo esc_attr( $button_size ); ?>-button-size group" rel="external nofollow" target="_blank">
 								<?php } ?>
 								
 									<svg version="1.1" id="<?php echo esc_attr( $social_network ); ?>-icon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
@@ -352,7 +352,7 @@ if ( ! class_exists( 'ZH_Button_Renderer' ) ) :
 							?>
 								
 								<?php if ( ! is_admin() ) { ?>
-								<a href="<?php echo $linkedinURL; ?>" class="zh-social-sharing-links zh-<?php echo esc_attr( $button_size ); ?>-button-size" rel="external nofollow" target="_blank">
+								<a href="<?php echo $linkedinURL; ?>" class="zh-social-sharing-links zh-<?php echo esc_attr( $button_size ); ?>-button-size group" rel="external nofollow" target="_blank">
 								<?php } ?>
 								
 									<svg version="1.1" id="<?php echo esc_attr( $social_network ); ?>-icon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
@@ -386,7 +386,7 @@ if ( ! class_exists( 'ZH_Button_Renderer' ) ) :
 							?>
 								
 								<?php if ( ! is_admin() ) { ?>
-								<a href="<?php echo $whatsappURL; ?>" class="zh-social-sharing-links zh-<?php echo esc_attr( $button_size ); ?>-button-size" rel="external nofollow" target="_blank">
+								<a href="<?php echo $whatsappURL; ?>" class="zh-social-sharing-links zh-<?php echo esc_attr( $button_size ); ?>-button-size group" rel="external nofollow" target="_blank">
 								<?php } ?>
 								
 									<svg version="1.1" id="<?php echo esc_attr( $social_network ); ?>-icon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
