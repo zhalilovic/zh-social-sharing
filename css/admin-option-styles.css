@@ -1,3 +1,4 @@
+/* Clearfix */
 .group:after {
 	content: "";
 	display: table;

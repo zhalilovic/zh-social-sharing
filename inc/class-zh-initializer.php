@@ -137,7 +137,7 @@ if ( ! class_exists( 'ZH_Initializer' ) ) :
 				wp_enqueue_style( 'jquery-ui-sortable' );
 				wp_enqueue_style( 'zh-admin-option-styles', ZH_PLUGIN_URL . 'css/admin-option-styles.css' );
 				
-				wp_enqueue_script( 'zh-jquery-custom', ZH_PLUGIN_URL . 'js/jquery.admin.js', array( 'wp-color-picker', 'jquery-ui-sortable' ), false, true );
+				wp_enqueue_script( 'zh-jquery-custom', ZH_PLUGIN_URL . 'js/jquery-admin.js', array( 'wp-color-picker', 'jquery-ui-sortable' ), false, true );
 			}
 		}
 		
@@ -147,7 +147,7 @@ if ( ! class_exists( 'ZH_Initializer' ) ) :
 		public function load_front_end_assets() {
 			if ( ! is_admin() ) {
 				wp_enqueue_style( 'zh-front-end-styles', ZH_PLUGIN_URL . 'css/front-end-styles.css' );
-				wp_enqueue_script( 'zh-front-end-script', ZH_PLUGIN_URL . 'js/jquery.front-end.js' );
+				wp_enqueue_script( 'zh-front-end-script', ZH_PLUGIN_URL . 'js/jquery-front-end.js' );
 			}	
 		}
 		

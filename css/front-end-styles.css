@@ -1,9 +1,11 @@
+/* Clearfix */
 .group:after {
 	content: "";
 	display: table;
 	clear: both;
 }
 
+/* Social Sharing buttons list */
 ul.zh-social-sharing-buttons {
 	list-style: none inside none;
 	padding: 0;
@@ -19,20 +21,20 @@ ul.zh-social-sharing-buttons {
 			display: block;
 		}
 		.zh-social-sharing-buttons .zh-social-sharing-links {	
-			box-shadow: none !important;
-			border: none !important;
+			box-shadow: none;
+			border: none;
 					
 			color: white;
 			font-weight: normal;
-			text-decoration: none !important;
+			text-decoration: none !important; /* Text decoration on button links doesn't look good */
 
 			transition: .2s all;
 		}
 			.zh-social-sharing-buttons .zh-social-sharing-links:hover,
 			.zh-social-sharing-buttons .zh-social-sharing-links:focus,
 			.zh-social-sharing-buttons .zh-social-sharing-links:active {
-				box-shadow: none !important;
-				border: none !important;
+				box-shadow: none;
+				border: none;
 				
 				color: white;
 				text-decoration: none !important;
@@ -50,20 +52,24 @@ ul.zh-social-sharing-buttons {
 					font-size: 12px;
 					
 				}
+				/* Small buttons */
 				.zh-social-sharing-buttons .zh-social-sharing-links.zh-small-button-size svg {
 					width: 30px;
 					height: 30px;
 				}
+				/* Small social networking names */
 				.zh-social-sharing-buttons .zh-social-sharing-links.zh-small-button-size .zh-social-network-names {
 					height: 30px;
 					
 					line-height: 30px;
 				}
+				/* Medium buttons */
 				.zh-social-sharing-buttons .zh-social-sharing-links.zh-medium-button-size svg,
 				.zh-social-sharing-buttons .zh-social-sharing-links svg {
 					width: 40px;
 					height: 40px;
 				}
+				/* Medium social networking names */
 				.zh-social-sharing-buttons .zh-social-sharing-links.zh-medium-button-size .zh-social-network-names,
 				.zh-social-sharing-buttons .zh-social-sharing-links .zh-social-network-names {
 					height: 40px;
@@ -71,10 +77,12 @@ ul.zh-social-sharing-buttons {
 					
 					line-height: 40px;
 				}
+				/* Large buttons */
 				.zh-social-sharing-buttons .zh-social-sharing-links.zh-large-button-size svg {
 					width: 50px;
 					height: 50px;
 				}
+				/* Large social networking names */
 				.zh-social-sharing-buttons .zh-social-sharing-links.zh-large-button-size .zh-social-network-names {
 					height: 50px;
 					padding: 0 16px 0 2px;
@@ -82,20 +90,24 @@ ul.zh-social-sharing-buttons {
 					line-height: 50px;
 				}		
 
+/* Post thumbnail wrapper */
 .zh-social-sharing-thumbnail-wrap {
 	position: relative;
 }
+	/* Post thumbnail social sharing buttons */
 	.zh-social-sharing-thumbnail-wrap ul.zh-social-sharing-buttons {
 		position: absolute;
 		bottom: 1.5rem; /* 24px */
 		left: 1.875rem; /* 30px */
 		margin-bottom: 0;
 	}
-	
+
+/* Social sharing buttons that display after the post title */	
 ul.zh-social-sharing-buttons.zh-title-buttons {
 	margin: 0.875rem 0 0 0; /* 14px 0 0 0 */
 }
 
+/* Social sharing buttons that float on the left of the screen */	
 ul.zh-social-sharing-buttons.zh-floating-buttons {
 	position: fixed;
 	top: 50%;
@@ -130,9 +142,8 @@ ul.zh-social-sharing-buttons.zh-floating-buttons {
 					transform: translate3d( 0, 0, 0 );
 				}
 
-
+/* Hide the whatsapp icon on non-mobile devices */	
 .whatsapp-hide-mobile {
-	display: none !important; /* Hide the whatsapp icon on mobile devices */
+	display: none;
 }
- 
  

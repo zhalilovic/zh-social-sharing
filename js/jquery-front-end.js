@@ -1,7 +1,10 @@
-/*-----------------------------------------------------------------------------------*/
-/*	Custom Header JS
-/*-----------------------------------------------------------------------------------*/
-
+/**
+ * @summary   Open share windows on social button clicks.
+ *
+ * @since     1.0.0
+ * @requires  jquery.js
+ */
+ 
 jQuery( document ).ready( function( $ ) {
 	"use strict";
 	
