@@ -1,12 +1,16 @@
 <?php
 /**
- * 
+ * Settings page HTML
+ *
+ * @author   Zlatan Halilovic
+ * @package  zh-social-sharing
+ * @since 	 1.0.0
  */
  
+// Exit the script if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
-	exit; // Exit the script if accessed directly.
+	exit; 
 }
-
 ?>
 
 <div class="wrap zh-social-sharing">

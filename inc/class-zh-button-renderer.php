@@ -1,21 +1,55 @@
 <?php
-/**
- * 
- */
- 
+
+// Exit the script if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
-	exit; // Exit the script if accessed directly.
+	exit; 
 }
  
 if ( ! class_exists( 'ZH_Button_Renderer' ) ) :
 
+	/**
+	 * Button Render Class
+	 *
+	 * Display the social sharing buttons.
+	 *
+	 * @class 		ZH_Button_Renderer
+	 * @version		1.0.0
+	 * @author 		Zlatan Halilovic
+	 */
 	class ZH_Button_Renderer {
 		
-		private $did_filter 			= 0;
-		private $buttons_title_class 	= 'zh-title-buttons';
+		/**
+		 * The number of times the_title filter is triggered in the main loop.
+		 *
+		 * @var int
+		 */
+		private $did_filter = 0;
+
+		/**
+		 * HTML class for the buttons' main ul element, that displays after the post's main title.
+		 *
+		 * @var string
+		 */
+		private $buttons_title_class = 'zh-title-buttons';
+
+		/**
+		 * HTML class for the buttons' main ul element, that displays in the left-hand side of the browser window.
+		 *
+		 * @var string
+		 */
 		private $buttons_floating_class = 'zh-floating-buttons';
-										
+		
+		/**
+		 * ZH_Button_Renderer Constructor.
+		 */							
 		public function __construct() {
+			$this->init_hooks();
+		}
+
+		/**
+		 * Hooks into actions and filters.
+		 */
+		private function init_hooks() {
 			add_filter( 'the_content', array( $this, 'display_buttons_after_the_content' ) );
 			add_filter( 'the_title', array( $this, 'display_buttons_after_the_title' ), 10, 2 );
 			add_filter( 'post_thumbnail_html', array( $this, 'display_buttons_inside_the_post_thumbnail' ), 10, 2 );
@@ -23,9 +57,17 @@ if ( ! class_exists( 'ZH_Button_Renderer' ) ) :
 			add_shortcode( 'zh_social_sharing', array( $this, 'social_sharing_shortcode' ) );
 		}
 		
+		/**
+		 * Displays the sharing buttons after the_content.
+		 *
+		 * @global WP_Post $post
+		 * @param string $content 
+		 * @return string
+		 */
 		public function display_buttons_after_the_content( $content ) {
 			global $post;
 			
+			// Render the buttons only on single posts or pages of allowed Post Types and in the main loop.
 			if( $this->is_allowed_post_type( $post->ID ) && $this->is_button_position_active( 'after_post_content' ) && is_singular() && is_main_query() && in_the_loop() ) {
 				$new_content = self::output_buttons( 
 					get_option( ZH_Settings::SETTING_ID_BUTTON_ORDER ), 
@@ -38,20 +80,28 @@ if ( ! class_exists( 'ZH_Button_Renderer' ) ) :
 			return $content;
 		}
 		
+		/**
+		 * Displays the sharing buttons after the main title.
+		 *
+		 * Renders the buttons only on single posts or pages of allowed Post Types and in the main loop.
+		 *
+		 * @global WP_Query $wp_query
+		 * @param string $title The title of the page or post. 
+		 * @param int $id The post ID
+		 * @return string
+		 */
 		public function display_buttons_after_the_title( $title, $id = NULL ) {
-			/**
-		     * only apply the filter to the current page's title,
-		     * and not to the other title's on the current page
-		     */
 		    global $wp_query;
-		    if( $id !==  $wp_query->queried_object_id ){
-		        return $title;
+
+		    if( $id !==  $wp_query->queried_object_id ) { // We are not in the main loop.
+		        return $title; 
 		    }
-    
+
+			// Render the buttons only on single posts or pages of allowed Post Types and in the main loop.    
 			if( $this->is_allowed_post_type( $id ) && $this->is_button_position_active( 'after_post_title' ) && is_singular() && is_main_query() && in_the_loop() ) {
-				$this->did_filter++;
+				$this->did_filter++; // Increment the number of the_title filters done.
 				
-				if ( 1 === $this->did_filter ) { 
+				if ( 1 === $this->did_filter ) { // The first the_title filter in the main loop is usually the main title of the page/post.
 					$new_title = self::output_buttons( 
 						get_option( ZH_Settings::SETTING_ID_BUTTON_ORDER ), 
 						get_option( ZH_Settings::SETTING_ID_HEX_COLOR ), 
@@ -65,11 +115,19 @@ if ( ! class_exists( 'ZH_Button_Renderer' ) ) :
 			
 			return $title;
 		} 
-         		
+        
+        /**
+		 * Displays the sharing buttons inside the post thumbnail.
+		 *
+		 * Renders the buttons only on single posts or pages of allowed Post Types and in the main loop.
+		 *
+		 * @param string $html Post thumbnail's HTML
+		 * @param int $post_id The post ID 
+		 * @return string
+		 */		
 		public function display_buttons_inside_the_post_thumbnail( $html, $post_id ) {
 			if ( ! empty( $html ) && $this->is_allowed_post_type( $post_id ) && $this->is_button_position_active( 'inside_featured_image' ) && is_singular() && is_main_query() && in_the_loop() ) {
 				$custom_output  = '<div class="zh-social-sharing-thumbnail-wrap">';
-				// $custom_output .= get_the_title();
 				$custom_output .= $html;
 				$custom_output .= self::output_buttons( 
 					get_option( ZH_Settings::SETTING_ID_BUTTON_ORDER ), 
@@ -84,6 +142,11 @@ if ( ! class_exists( 'ZH_Button_Renderer' ) ) :
 			return $html;
 		}
 		
+		/**
+		 * Displays the sharing buttons on the left-hand side of the browser window.
+		 *		 
+		 * @global WP_Post $post
+		 */	
 		public function display_left_floating_buttons() {
 			global $post;
 			
@@ -98,6 +161,12 @@ if ( ! class_exists( 'ZH_Button_Renderer' ) ) :
 			}
 		}
 		
+		/**
+		 * Checks to see if the given post type is allowed.
+		 *		 
+		 * @param id $post_id The post ID
+		 * @return bool
+		 */	
 		public function is_allowed_post_type( $post_id ) {
 		    if ( $post_id ) {
 				$allowed_post_types = (array) get_option( ZH_Settings::SETTING_ID_POST_TYPES ); 
@@ -114,6 +183,12 @@ if ( ! class_exists( 'ZH_Button_Renderer' ) ) :
 		    }
 		}
 		
+		/**
+		 * Checks to see if the given position of the button is active or allowed.
+		 *		 
+		 * @param string $position The section of the page/post where the buttons can appear.
+		 * @return bool
+		 */	
 		public function is_button_position_active( $position ) {				
 	        if ( in_array( $position, (array) get_option( ZH_Settings::SETTING_ID_BUTTON_POSITIONS ) ) ) {
 	            return true;
@@ -123,6 +198,20 @@ if ( ! class_exists( 'ZH_Button_Renderer' ) ) :
 	        }
 		}
 		
+		/**
+		 * Runs when the zh_social_sharing shortcode is found.
+		 *		 
+		 * @param array $atts {
+		 *     Optional. An array of shortcode arguments.
+		 *
+		 *     @type array  $social_networks An array of social networks with a custom order.
+		 *                                   Default array('facebook', 'twitter', 'google_plus', 'pinterest', 'linkedin', 'whatsapp'). 
+		 *									 Accepts any of the values above.
+		 *     @type string $color A hex color for the buttons. Default ''. Accepts any hex color. 
+		 *     @type string $size The size of the buttons. Default 'medium'. Accepts 'small', 'medium', and 'large'.
+		 * }		 
+		 * @return string
+		 */
 		public function social_sharing_shortcode( $atts ) {			
 			extract( shortcode_atts( array(
 				'social_networks' => ZH_Settings::get_default_social_networks(),
@@ -132,18 +221,32 @@ if ( ! class_exists( 'ZH_Button_Renderer' ) ) :
 			
 			if ( is_string( $social_networks ) ) {
 				$social_networks = preg_replace('/\s+/', '', $social_networks); // Strip all whitespace
-				$social_networks = explode( ',', $social_networks );
+				$social_networks = explode( ',', $social_networks ); // Convert the social networking argument to a comma-delimited array
 			}	
 			
 			if ( ! sanitize_hex_color( $color ) ) {
 				$color = '';
 			}	
 			
-			$size = sanitize_html_class( preg_replace('/\s+/', '', $size), ZH_Settings::get_default_button_size() ); // Strip all whitespace	
+			$size = sanitize_html_class( preg_replace('/\s+/', '', $size), ZH_Settings::get_default_button_size() ); 	
 															
 			return $this->output_buttons( $social_networks, $color, $size );
 		}
 		
+		/**
+		 * Retrieves the HTML for the social networking sharing buttons.
+		 *
+		 * Gets the sharing buttons' HTML for either the plugin's settings page or the front-end.
+		 *
+		 * @global WP_Post $post 
+		 * @param array  $social_networks Chosen social networks, defined in the order in which they will display.
+		 * @param string $hex_color The color of the buttons.
+		 * @param string $button_size The size of the sharing buttons.
+		 * @param bool   $colors_allowed Determines whether a custom hex color should be applied to the buttons or not.
+		 * @param string|NULL $source_class The class applied to the main ul element.
+		 * @param string|NULL $button_order_option_id The option ID for the button order.
+		 * @return string
+		 */	
 		public static function output_buttons( $social_networks, $hex_color, $button_size, $colors_allowed = true, $source_class = NULL, $button_order_option_id = NULL ) {
 			ob_start();
 			
@@ -153,13 +256,16 @@ if ( ! class_exists( 'ZH_Button_Renderer' ) ) :
 				// Get current page URL
 				$url = urlencode( get_permalink( $post->ID ) );
 				
-				// Get current page title
-				$the_title = urlencode( html_entity_decode( single_post_title( '', false ), ENT_COMPAT, 'UTF-8' ) ); // Use single_post_title to retrieve title in order not to evoke the_title filter.
+				/* 
+				 * Get current page title by using the single_post_title() function
+				 * in order not to evoke the_title filter.
+				 */
+				$the_title = urlencode( html_entity_decode( single_post_title( '', false ), ENT_COMPAT, 'UTF-8' ) ); 
 			
-				// Get Post Thumbnail for pinterest
+				// Get Post Thumbnail for pinterest.
 				$post_thumbnail = wp_get_attachment_image_src( get_post_thumbnail_id( $post->ID ), 'full' );
 				
-				// Construct sharing URL without using any script
+				// Construct sharing URLs without using any scripts.
 				$facebookURL = 'https://www.facebook.com/sharer/sharer.php?u=' . $url;
 				$twitterURL = 'https://twitter.com/intent/tweet?text=' . $the_title . '&amp;url=' . $url;
 				$googleURL = 'https://plus.google.com/share?url=' . $url;

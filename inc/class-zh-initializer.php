@@ -44,13 +44,13 @@ if ( ! class_exists( 'ZH_Initializer' ) ) :
 		private static $instance = null;
 		
 		/**
-		 * Main ZH_Initialzer Instance.
+		 * Main ZH_Initializer Instance.
 		 *
 		 * Ensures only one instance of ZH_Initializer is loaded or can be loaded.
 		 *
 		 * @since 1.0.0
 		 * @static
-		 * @return ZH-Initializer - Main instance.
+		 * @return ZH_Initializer - Main instance.
 		 */
 	    public static function get_instance() {
 	  
