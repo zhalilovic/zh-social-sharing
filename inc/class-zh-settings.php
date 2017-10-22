@@ -583,7 +583,7 @@ if ( ! class_exists( 'ZH_Settings' ) ) :
 		/**
 		 * Gets the default button positions for the single post/page. 
 		 *
-		 * @return arrays
+		 * @return array
 		 */
 		public static function get_default_button_positions() {
 			return self::$default_button_positions;

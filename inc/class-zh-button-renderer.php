@@ -70,7 +70,7 @@ if ( ! class_exists( 'ZH_Button_Renderer' ) ) :
 			// Render the buttons only on single posts or pages of allowed Post Types and in the main loop.
 			if( $this->is_allowed_post_type( $post->ID ) && $this->is_button_position_active( 'after_post_content' ) && is_singular() && is_main_query() && in_the_loop() ) {
 				$new_content = self::output_buttons( 
-					get_option( ZH_Settings::SETTING_ID_BUTTON_ORDER ), 
+					$this->get_ordered_social_networks( get_option( ZH_Settings::SETTING_ID_SOCIAL_NETWORKS ), get_option( ZH_Settings::SETTING_ID_BUTTON_ORDER ) ),
 					get_option( ZH_Settings::SETTING_ID_HEX_COLOR ), 
 					get_option( ZH_Settings::SETTING_ID_BUTTON_SIZES ), 
 					get_option( ZH_Settings::SETTING_ID_CUSTOM_COLOR ) 
@@ -103,7 +103,7 @@ if ( ! class_exists( 'ZH_Button_Renderer' ) ) :
 				
 				if ( 1 === $this->did_filter ) { // The first the_title filter in the main loop is usually the main title of the page/post.
 					$new_title = self::output_buttons( 
-						get_option( ZH_Settings::SETTING_ID_BUTTON_ORDER ), 
+						$this->get_ordered_social_networks( get_option( ZH_Settings::SETTING_ID_SOCIAL_NETWORKS ), get_option( ZH_Settings::SETTING_ID_BUTTON_ORDER ) ),
 						get_option( ZH_Settings::SETTING_ID_HEX_COLOR ), 
 						get_option( ZH_Settings::SETTING_ID_BUTTON_SIZES ), 
 						get_option( ZH_Settings::SETTING_ID_CUSTOM_COLOR ),
@@ -130,7 +130,7 @@ if ( ! class_exists( 'ZH_Button_Renderer' ) ) :
 				$custom_output  = '<div class="zh-social-sharing-thumbnail-wrap">';
 				$custom_output .= $html;
 				$custom_output .= self::output_buttons( 
-					get_option( ZH_Settings::SETTING_ID_BUTTON_ORDER ), 
+					$this->get_ordered_social_networks( get_option( ZH_Settings::SETTING_ID_SOCIAL_NETWORKS ), get_option( ZH_Settings::SETTING_ID_BUTTON_ORDER ) ),
 					get_option( ZH_Settings::SETTING_ID_HEX_COLOR ), 
 					get_option( ZH_Settings::SETTING_ID_BUTTON_SIZES ), 
 					get_option( ZH_Settings::SETTING_ID_CUSTOM_COLOR ) 
@@ -152,7 +152,7 @@ if ( ! class_exists( 'ZH_Button_Renderer' ) ) :
 			
 			if( $this->is_allowed_post_type( $post->ID ) && $this->is_button_position_active( 'float_left' ) && is_singular() ) {
 				echo self::output_buttons( 
-					get_option( ZH_Settings::SETTING_ID_BUTTON_ORDER ), 
+					$this->get_ordered_social_networks( get_option( ZH_Settings::SETTING_ID_SOCIAL_NETWORKS ), get_option( ZH_Settings::SETTING_ID_BUTTON_ORDER ) ), 
 					get_option( ZH_Settings::SETTING_ID_HEX_COLOR ), 
 					get_option( ZH_Settings::SETTING_ID_BUTTON_SIZES ), 
 					get_option( ZH_Settings::SETTING_ID_CUSTOM_COLOR ),
@@ -160,7 +160,31 @@ if ( ! class_exists( 'ZH_Button_Renderer' ) ) :
 				);
 			}
 		}
-		
+
+		/**
+		 * Retrieves ordered social networks, chosen by the user.
+		 *
+		 * @param  array $selected_social_networks Social networks selected by the user on the options page.
+		 * @param  array $ordered_available_networks All available social networks ordered on the options page.
+		 * @return array
+		 */
+		public function get_ordered_social_networks( $selected_social_networks, $ordered_available_networks ) {
+			$prefix = 'zh-';
+			$ordered_selected_networks = array();
+			
+			foreach ( $ordered_available_networks as $social_network ) {
+				/*
+				 * Get the social network without the prefix and check if it is selected 
+				 * for display in the $selected_social_networks array
+				 */  
+			    if( in_array( substr( $social_network, strlen( $prefix ) ), $selected_social_networks ) ) {
+			    	$ordered_selected_networks[] = $social_network;
+			    }
+			}
+
+			return $ordered_selected_networks;
+		}
+
 		/**
 		 * Checks to see if the given post type is allowed.
 		 *		 
