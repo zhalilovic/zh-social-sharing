@@ -18,7 +18,7 @@ ZH Social Sharing is a plugin made for anyone who wants to easily display sharin
 4. Save the customised options.
 5. Navigate to single pages or posts of Post Types where you have chosen to have your buttons display, to see the buttons in action. 
 
-== Frequently Asked Questions ==
+== Frequently Asked Questionss ==
 
 = Is there a shortcode available for this plugin? =
 
